@@ -2,4 +2,9 @@ html,
 body {
 	margin: 2%;
 	height: 100%;
+	background-color: bisque;
+}
+
+#information {
+	padding: 20px;
 }

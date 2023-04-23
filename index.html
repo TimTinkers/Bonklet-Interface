@@ -10,6 +10,18 @@
 
 <body>
 
+	<!-- An informational panel. -->
+	<div id="information">
+		This is the frontend interface for a fractionalized <a href="https://bonkler.remilia.org">Bonkler</a> bidding
+		system. Bonkler is an on-chain religious artifact by the <a href="https://remilia.org">Remilia Corporation</a>, this
+		site and the fractionalized bidder it supports is not affiliated with Remilia. The address of the deployed
+		fractionalized bidder is <a
+			href="https://etherscan.io/address/0x7964929ecbaf3f9704edcd6120126f6e85900883#code">0x7964929Ecbaf3F9704edCd6120126F6E85900883</a>
+		and you can find its source code <a href="https://github.com/TimTinkers/Bonklet">here</a>. The Bonklet
+		fractionalized bidder was made by <a href="https://twitter.com/_Enoch">Tim</a>, if you have any questions come join
+		the Discord <a href="http://discord.gg/xjXySxKRXk">here</a>.
+	</div>
+
 	<!-- Display details about the current Bonkler auction. -->
 	<div id="bonkler-details">
 		Loading ...
@@ -948,7 +960,6 @@
 		let bonklerId;
 		let generationHash;
 		async function retrieveBonklerDetails() {
-			console.log('Polling Bonkler ...')
 
 			// Update the Bonkler generation hash.
 			const bonklerResponse = await fetch(
@@ -959,7 +970,6 @@
 
 			// Retrieve auction details.
 			const bonklerAuctionData = await bonklerAuction.auctionData();
-			console.log(bonklerAuctionData)
 			bonklerId = bonklerAuctionData.bonklerId;
 			const bidAmount = bonklerAuctionData.amount;
 			const winningBidder = bonklerAuctionData.bidder;
@@ -978,11 +988,10 @@
 			const status = (winningBidder == BONKLET_BIDDER_ADDRESS)
 				? 'winning' : 'losing';
 			const stagedTotal = await bonkletBidder.stagedTotal(bonklerId);
-			console.log(stagedTotal);
 
 			// Update the Bonklet display.
 			const bonkletDetails = document.getElementById('bonklet-details');
-			bonkletDetails.textContent = `The Bonklet bidder is currently ${status} with a bid of ${ethers.utils.formatEther(stagedTotal)} Ether.`;
+			bonkletDetails.textContent = `The Bonklet bidder is currently ${status}, with a bid of ${ethers.utils.formatEther(stagedTotal)} Ether.`;
 		};
 
 		// Periodically poll the Bonkler auction.
