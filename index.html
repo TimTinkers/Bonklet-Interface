@@ -10,8 +10,1015 @@
 
 <body>
 
-	<!-- A mint button. -->
-	This site is a work-in-progress.
+	<!-- Display details about the current Bonkler auction. -->
+	<div id="bonkler-details">
+		Loading ...
+	</div>
+
+	<!-- Display details about the current Bonklet bid. -->
+	<div id="bonklet-details">
+		Loading ...
+	</div>
+
+	<!-- Display a bid contribution field. -->
+	<div id="bid-area">
+		<input id="bid-amount" type="number" min="0.1" step="0.1" value="0.1">
+		<button id="contribute-bid">
+			Contribute Bid
+		</button>
+	</div>
+
+	<!-- A script for purchasing. -->
+	<script type="module">
+		import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.6.8/ethers.esm.min.js';
+
+		// General configuration.
+		const CURRENT_GENERATION_HASH = ethers.BigNumber.from('2950481187099178');
+		const POLL_RATE = 10000;
+		const INFURA_PROJECT_ID = '8f4c8108a4fc4cae8ad12dd3f402c49f';
+
+		// Bonkler configuration.
+		const BONKLER_AUCTION_ADDRESS =
+			'0xF421391011Dc77c0C2489d384C26e915Efd9e2C5';
+		const BONKLER_AUCTION_ABI = [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "extended",
+						"type": "bool"
+					}
+				],
+				"name": "AuctionBid",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "startTime",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "endTime",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionDurationUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "endTime",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionExtended",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "winner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionSettled",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "timeBuffer",
+						"type": "uint256"
+					}
+				],
+				"name": "AuctionTimeBufferUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					}
+				],
+				"name": "BonklerRedeemed",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "auctionData",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "bidder",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "amount",
+								"type": "uint96"
+							},
+							{
+								"internalType": "uint96",
+								"name": "withdrawable",
+								"type": "uint96"
+							},
+							{
+								"internalType": "uint40",
+								"name": "startTime",
+								"type": "uint40"
+							},
+							{
+								"internalType": "uint40",
+								"name": "endTime",
+								"type": "uint40"
+							},
+							{
+								"internalType": "uint24",
+								"name": "bonklerId",
+								"type": "uint24"
+							},
+							{
+								"internalType": "uint24",
+								"name": "generationHashesLength",
+								"type": "uint24"
+							},
+							{
+								"internalType": "bool",
+								"name": "settled",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint8",
+								"name": "reservePercentage",
+								"type": "uint8"
+							},
+							{
+								"internalType": "address",
+								"name": "bonklers",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "reservePrice",
+								"type": "uint96"
+							},
+							{
+								"internalType": "uint96",
+								"name": "bidIncrement",
+								"type": "uint96"
+							},
+							{
+								"internalType": "uint32",
+								"name": "duration",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint32",
+								"name": "timeBuffer",
+								"type": "uint32"
+							},
+							{
+								"internalType": "uint256",
+								"name": "bonklersBalance",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "bonklersTotalRedeemed",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct BonklerAuction.AuctionData",
+						"name": "data",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "hasEnded",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		];
+
+		// Bonklet bidder configuration.
+		const BONKLET_BIDDER_ADDRESS = '0x7964929Ecbaf3F9704edCd6120126F6E85900883';
+		const BONKLET_BIDDER_ABI = [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "totalAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "BidExecuted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "totalAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "BidStaged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "bidder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "totalAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "BidWithdrawn",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "claimant",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonkletId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "reward",
+						"type": "uint256"
+					}
+				],
+				"name": "BonkletClaimed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonkletId",
+						"type": "uint256"
+					}
+				],
+				"name": "RedemptionExecuted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonkletId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "signal",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "shares",
+						"type": "uint256"
+					}
+				],
+				"name": "RedemptionVote",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "settler",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					}
+				],
+				"name": "Settled",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonkletId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "destination",
+						"type": "address"
+					}
+				],
+				"name": "TransferExecuted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonklerId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "bonkletId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "destination",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "signal",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "shares",
+						"type": "uint256"
+					}
+				],
+				"name": "TransferVote",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "BIDDER_LIMIT",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "BID_MINIMUM",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "BONKLER",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "BONKLER_AUCTION",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "BONKLER_TREASURY",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "BONKLET",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "REDEMPTION_QUORUM",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "bonkletData",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "bonklerId",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "stagedEther",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "callerStagedBids",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_bonkletId",
+						"type": "uint256"
+					}
+				],
+				"name": "claim",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_bonkletId",
+						"type": "uint256"
+					}
+				],
+				"name": "redeem",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "redeemed",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "redemptionShares",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "redemptionVoted",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_bonklerId",
+						"type": "uint256"
+					}
+				],
+				"name": "settle",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "settled",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_bonklerId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_generationHash",
+						"type": "uint256"
+					}
+				],
+				"name": "stageBid",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "stagedTotal",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_bonkletId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_destination",
+						"type": "address"
+					}
+				],
+				"name": "transfer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "transferShares",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "transferVoted",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_bonklerId",
+						"type": "uint256"
+					}
+				],
+				"name": "withdrawBid",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		];
+
+		// Instantiate an Infura provider.
+		const infuraProvider = new ethers.providers.InfuraProvider(
+			'mainnet',
+			INFURA_PROJECT_ID
+		);
+
+		// Establish connection to the contracts.
+		const bonklerAuction = new ethers.Contract(
+			BONKLER_AUCTION_ADDRESS,
+			BONKLER_AUCTION_ABI,
+			infuraProvider
+		);
+		const bonkletBidder = new ethers.Contract(
+			BONKLET_BIDDER_ADDRESS,
+			BONKLET_BIDDER_ABI,
+			infuraProvider
+		);
+
+		// Retrieve important Bonkler auction details.
+		let bonklerId;
+		let generationHash;
+		async function retrieveBonklerDetails() {
+			console.log('Polling Bonkler ...')
+
+			// Update the Bonkler generation hash.
+			const bonklerResponse = await fetch(
+				'https://bonkler.remilia.org/bonkler?c=1'
+			);
+			const bonklerJSON = await bonklerResponse.json();
+			generationHash = bonklerJSON.generationHash;
+
+			// Retrieve auction details.
+			const bonklerAuctionData = await bonklerAuction.auctionData();
+			console.log(bonklerAuctionData)
+			bonklerId = bonklerAuctionData.bonklerId;
+			const bidAmount = bonklerAuctionData.amount;
+			const winningBidder = bonklerAuctionData.bidder;
+			const endTime = bonklerAuctionData.endTime;
+			const duration = endTime - Math.floor((new Date()).getTime() / 1000);
+			const hours = Math.floor(duration / (60 * 60)) + '';
+			const minutes = Math.floor((duration - (hours * 60 * 60)) / 60) + '';
+			const seconds = Math.floor(duration - (hours * 60 * 60) - (minutes * 60))
+				+ '';
+
+			// Update the Bonkler display.
+			const bonklerDetails = document.getElementById('bonkler-details');
+			bonklerDetails.textContent = `${winningBidder} is winning Bonkler ${bonklerId} with ${ethers.utils.formatEther(bidAmount)} Ether; the auction ends in ${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}.`;
+
+			// Retrieve Bonklet bidder details.
+			const status = (winningBidder == BONKLET_BIDDER_ADDRESS)
+				? 'winning' : 'losing';
+			const stagedTotal = await bonkletBidder.stagedTotal(bonklerId);
+			console.log(stagedTotal);
+
+			// Update the Bonklet display.
+			const bonkletDetails = document.getElementById('bonklet-details');
+			bonkletDetails.textContent = `The Bonklet bidder is currently ${status} with a bid of ${ethers.utils.formatEther(stagedTotal)} Ether.`;
+		};
+
+		// Periodically poll the Bonkler auction.
+		retrieveBonklerDetails();
+		(function poll() {
+			setTimeout(async () => {
+				retrieveBonklerDetails();
+				poll();
+			}, POLL_RATE);
+		})();
+
+		// Upon mint being requested, retrieve the signer.
+		document.getElementById('contribute-bid').addEventListener('click',
+			async function (event) {
+
+				// Retrieve the current user's signer.
+				const provider = new ethers.providers.Web3Provider(
+					window.ethereum,
+					'any'
+				);
+				await provider.send('eth_requestAccounts', []);
+				const signer = provider.getSigner();
+				const address = await signer.getAddress();
+
+				// Issue the stage bid transaction.
+				const bidAmount = document.getElementById('bid-amount');
+				let amount = bidAmount.value;
+				await bonkletBidder.connect(signer).stageBid(
+					bonklerId,
+					generationHash,
+					{
+						value: ethers.utils.parseEther(amount)
+					}
+				);
+			});
+	</script>
 </body>
 
 </html>
