@@ -40,12 +40,21 @@
 		</button>
 	</div>
 
+	<!-- Display a Bonkler power leaderboard. -->
+	<div id="leaderboard-area">
+		<h1>
+			Bonkler Energy
+		</h1>
+		<ul id="leaderboard">
+			Loading ...
+		</ul>
+	</div>
+
 	<!-- A script for purchasing. -->
 	<script type="module">
 		import {ethers} from 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.6.8/ethers.esm.min.js';
 
 		// General configuration.
-		const CURRENT_GENERATION_HASH = ethers.BigNumber.from('2950481187099178');
 		const POLL_RATE = 10000;
 		const INFURA_PROJECT_ID = '8f4c8108a4fc4cae8ad12dd3f402c49f';
 
@@ -303,7 +312,8 @@
 		];
 
 		// Bonklet bidder configuration.
-		const BONKLET_BIDDER_ADDRESS = '0x7964929Ecbaf3F9704edCd6120126F6E85900883';
+		const BONKLET_BIDDER_0 = '0x95F75bc6Bbd1a5C3474a61a0514F519389262FE6';
+		const BONKLET_BIDDER_1 = '0x7964929Ecbaf3F9704edCd6120126F6E85900883';
 		const BONKLET_BIDDER_ABI = [
 			{
 				"anonymous": false,
@@ -938,6 +948,18 @@
 			}
 		];
 
+		// Bonkler NFT configuration.
+		const BONKLER_NFT_ADDRESS = '0xABFaE8A54e6817F57F9De7796044E9a60e61ad67';
+		const BONKLER_NFT_ABI = [
+			{"inputs": [], "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": false, "inputs": [{"indexed": true, "internalType": "address", "name": "owner", "type": "address"}, {"indexed": true, "internalType": "address", "name": "approved", "type": "address"}, {"indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "Approval", "type": "event"}, {"anonymous": false, "inputs": [{"indexed": true, "internalType": "address", "name": "owner", "type": "address"}, {"indexed": true, "internalType": "address", "name": "operator", "type": "address"}, {"indexed": false, "internalType": "bool", "name": "approved", "type": "bool"}], "name": "ApprovalForAll", "type": "event"}, {"anonymous": false, "inputs": [{"indexed": true, "internalType": "address", "name": "previousOwner", "type": "address"}, {"indexed": true, "internalType": "address", "name": "newOwner", "type": "address"}], "name": "OwnershipTransferred", "type": "event"}, {"anonymous": false, "inputs": [{"indexed": true, "internalType": "address", "name": "from", "type": "address"}, {"indexed": true, "internalType": "address", "name": "to", "type": "address"}, {"indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "Transfer", "type": "event"}, {"inputs": [], "name": "START_TOKEN_ID", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "address", "name": "to", "type": "address"}, {"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "approve", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "owner", "type": "address"}], "name": "balanceOf", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "baseURILocked", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]"}], "name": "exist", "outputs": [{"internalType": "bool[]", "name": "results", "type": "bool[]"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "exists", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "getApproved", "outputs": [{"internalType": "address", "name": "", "type": "address"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "getBonklerHash", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "getBonklerShares", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "address", "name": "owner", "type": "address"}, {"internalType": "address", "name": "operator", "type": "address"}], "name": "isApprovedForAll", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "lockBaseURI", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [], "name": "lockMint", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [], "name": "lockMinter", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "generationHash", "type": "uint256"}], "name": "mint", "outputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "stateMutability": "payable", "type": "function"}, {"inputs": [], "name": "mintLocked", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "minterLocked", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "name", "outputs": [{"internalType": "string", "name": "", "type": "string"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "nextTokenId", "outputs": [{"internalType": "uint32", "name": "", "type": "uint32"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "owner", "outputs": [{"internalType": "address", "name": "", "type": "address"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "ownerOf", "outputs": [{"internalType": "address", "name": "", "type": "address"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "redeemBonkler", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "from", "type": "address"}, {"internalType": "address", "name": "to", "type": "address"}, {"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "from", "type": "address"}, {"internalType": "address", "name": "to", "type": "address"}, {"internalType": "uint256", "name": "tokenId", "type": "uint256"}, {"internalType": "bytes", "name": "data", "type": "bytes"}], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "operator", "type": "address"}, {"internalType": "bool", "name": "approved", "type": "bool"}], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "string", "name": "baseURI", "type": "string"}], "name": "setBaseURI", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "minter", "type": "address"}], "name": "setMinter", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "bytes4", "name": "interfaceId", "type": "bytes4"}], "name": "supportsInterface", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "symbol", "outputs": [{"internalType": "string", "name": "", "type": "string"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "tokenURI", "outputs": [{"internalType": "string", "name": "result", "type": "string"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "address", "name": "owner", "type": "address"}], "name": "tokensOfOwner", "outputs": [{"internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "totalMinted", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "totalRedeemed", "outputs": [{"internalType": "uint32", "name": "", "type": "uint32"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "totalSupply", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "address", "name": "from", "type": "address"}, {"internalType": "address", "name": "to", "type": "address"}, {"internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "transferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "newOwner", "type": "address"}], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "tokenId", "type": "uint256"}, {"internalType": "address", "name": "to", "type": "address"}], "name": "transferPurchasedBonkler", "outputs": [], "stateMutability": "payable", "type": "function"}
+		];
+
+		// Bonklet NFT configuration.
+		const BONKLET_NFT_ADDRESS = '0x68c51841b4dF39FB84f292cA26B76E7E2b4f1965';
+		const BONKLET_NFT_ABI = [
+			{"inputs": [{"internalType": "string", "name": "_name", "type": "string"}, {"internalType": "string", "name": "_symbol", "type": "string"}, {"internalType": "string", "name": "_metadataURI", "type": "string"}, {"internalType": "uint256", "name": "_cap", "type": "uint256"}], "stateMutability": "nonpayable", "type": "constructor"}, {"inputs": [], "name": "ApprovalCallerNotOwnerNorApproved", "type": "error"}, {"inputs": [], "name": "ApprovalQueryForNonexistentToken", "type": "error"}, {"inputs": [], "name": "CapExceeded", "type": "error"}, {"inputs": [], "name": "MintToZeroAddress", "type": "error"}, {"inputs": [], "name": "MintZeroQuantity", "type": "error"}, {"inputs": [], "name": "NotAnAdmin", "type": "error"}, {"inputs": [], "name": "OwnerQueryForNonexistentToken", "type": "error"}, {"inputs": [], "name": "TransferCallerNotOwnerNorApproved", "type": "error"}, {"inputs": [], "name": "TransferFromIncorrectOwner", "type": "error"}, {"inputs": [], "name": "TransferToNonERC721ReceiverImplementer", "type": "error"}, {"inputs": [], "name": "TransferToZeroAddress", "type": "error"}, {"inputs": [], "name": "URIQueryForNonexistentToken", "type": "error"}, {"anonymous": false, "inputs": [{"indexed": true, "internalType": "address", "name": "owner", "type": "address"}, {"indexed": true, "internalType": "address", "name": "approved", "type": "address"}, {"indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "Approval", "type": "event"}, {"anonymous": false, "inputs": [{"indexed": true, "internalType": "address", "name": "owner", "type": "address"}, {"indexed": true, "internalType": "address", "name": "operator", "type": "address"}, {"indexed": false, "internalType": "bool", "name": "approved", "type": "bool"}], "name": "ApprovalForAll", "type": "event"}, {"anonymous": false, "inputs": [{"indexed": true, "internalType": "address", "name": "previousOwner", "type": "address"}, {"indexed": true, "internalType": "address", "name": "newOwner", "type": "address"}], "name": "OwnershipTransferred", "type": "event"}, {"anonymous": false, "inputs": [{"indexed": true, "internalType": "address", "name": "from", "type": "address"}, {"indexed": true, "internalType": "address", "name": "to", "type": "address"}, {"indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256"}], "name": "Transfer", "type": "event"}, {"inputs": [{"internalType": "uint256", "name": "_id", "type": "uint256"}], "name": "_exists", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_approved", "type": "address"}, {"internalType": "uint256", "name": "_id", "type": "uint256"}], "name": "approve", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_owner", "type": "address"}], "name": "balanceOf", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "cap", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "_id", "type": "uint256"}], "name": "getApproved", "outputs": [{"internalType": "address", "name": "", "type": "address"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_owner", "type": "address"}, {"internalType": "address", "name": "_operator", "type": "address"}], "name": "isApprovedForAll", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "metadataUri", "outputs": [{"internalType": "string", "name": "", "type": "string"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_recipient", "type": "address"}, {"internalType": "uint256", "name": "_amount", "type": "uint256"}], "name": "mint_Qgo", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [], "name": "name", "outputs": [{"internalType": "string", "name": "", "type": "string"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "owner", "outputs": [{"internalType": "address", "name": "", "type": "address"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "_id", "type": "uint256"}], "name": "ownerOf", "outputs": [{"internalType": "address", "name": "", "type": "address"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_from", "type": "address"}, {"internalType": "address", "name": "_to", "type": "address"}, {"internalType": "uint256", "name": "_id", "type": "uint256"}], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_from", "type": "address"}, {"internalType": "address", "name": "_to", "type": "address"}, {"internalType": "uint256", "name": "_id", "type": "uint256"}, {"internalType": "bytes", "name": "_data", "type": "bytes"}], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_newAdmin", "type": "address"}, {"internalType": "bool", "name": "_isAdmin", "type": "bool"}], "name": "setAdmin", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_operator", "type": "address"}, {"internalType": "bool", "name": "_approved", "type": "bool"}], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "string", "name": "_uri", "type": "string"}], "name": "setURI", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "bytes4", "name": "_interfaceId", "type": "bytes4"}], "name": "supportsInterface", "outputs": [{"internalType": "bool", "name": "", "type": "bool"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "symbol", "outputs": [{"internalType": "string", "name": "", "type": "string"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "uint256", "name": "_id", "type": "uint256"}], "name": "tokenURI", "outputs": [{"internalType": "string", "name": "", "type": "string"}], "stateMutability": "view", "type": "function"}, {"inputs": [], "name": "totalSupply", "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}], "stateMutability": "view", "type": "function"}, {"inputs": [{"internalType": "address", "name": "_from", "type": "address"}, {"internalType": "address", "name": "_to", "type": "address"}, {"internalType": "uint256", "name": "_id", "type": "uint256"}], "name": "transferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function"}, {"inputs": [{"internalType": "address", "name": "newOwner", "type": "address"}], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function"}
+		];
+
 		// Instantiate an Infura provider.
 		const infuraProvider = new ethers.providers.InfuraProvider(
 			'mainnet',
@@ -950,11 +972,120 @@
 			BONKLER_AUCTION_ABI,
 			infuraProvider
 		);
-		const bonkletBidder = new ethers.Contract(
-			BONKLET_BIDDER_ADDRESS,
+		const bonkletBidder0 = new ethers.Contract(
+			BONKLET_BIDDER_0,
 			BONKLET_BIDDER_ABI,
 			infuraProvider
 		);
+		const bonkletBidder1 = new ethers.Contract(
+			BONKLET_BIDDER_1,
+			BONKLET_BIDDER_ABI,
+			infuraProvider
+		);
+		const bonklerNFT = new ethers.Contract(
+			BONKLER_NFT_ADDRESS,
+			BONKLER_NFT_ABI,
+			infuraProvider
+		);
+		const bonkletNFT = new ethers.Contract(
+			BONKLET_NFT_ADDRESS,
+			BONKLET_NFT_ABI,
+			infuraProvider
+		);
+
+		// Populate the Bonkler leaderboard.
+		(async function () {
+			const nextBonklerId = await bonklerNFT.nextTokenId();
+
+			// TODO: this is a disgusting hack. Cache it off-chain.
+			// Find the owner and share power of each Bonkler.
+			const bonkletBidderAddresses = [
+				'0x95F75bc6Bbd1a5C3474a61a0514F519389262FE6',
+				'0x7964929Ecbaf3F9704edCd6120126F6E85900883'
+			];
+			const bonklerOwners = {};
+			for (let i = 1; i < nextBonklerId; i++) {
+				let owner = await bonklerNFT.ownerOf(i);
+				const ens = await infuraProvider.lookupAddress(owner);
+				const shares = await bonklerNFT.getBonklerShares(i);
+				if (shares.eq(0)) {
+					continue;
+				}
+
+				// Combine Bonklet addresses.
+				if (bonkletBidderAddresses.includes(owner)) {
+					owner = 'Bonklets';
+				}
+
+				// Add or update an owner with their cumulative share count.
+				if (!bonklerOwners[owner]) {
+					bonklerOwners[owner] = {
+						name: ens ? ens : owner,
+						shares: shares
+					};
+				} else {
+					bonklerOwners[owner] = {
+						name: ens ? ens : owner,
+						shares: bonklerOwners[owner].shares.add(shares)
+					};
+				}
+			}
+
+			// Process Bonklets v0 to identify subholders.
+			for (let i = 1; i < 5; i++) {
+				const owner = await bonkletNFT.ownerOf(i);
+				const ens = await infuraProvider.lookupAddress(owner);
+				const data = await bonkletBidder0.bonkletData(i);
+
+				// Add or update an owner with their cumulative share count.
+				if (!bonklerOwners[owner]) {
+					bonklerOwners[owner] = {
+						name: ens ? ens : owner,
+						shares: data.stagedEther
+					};
+				} else {
+					bonklerOwners[owner] = {
+						name: ens ? ens : owner,
+						shares: bonklerOwners[owner].shares.add(data.stagedEther)
+					};
+				}
+			}
+
+			// Process Bonklets v1 to identify subholders.
+			const bonkletSupply = await bonkletNFT.totalSupply();
+			for (let i = 5; i < bonkletSupply; i++) {
+				const owner = await bonkletNFT.ownerOf(i);
+				const ens = await infuraProvider.lookupAddress(owner);
+				const data = await bonkletBidder1.bonkletData(i);
+
+				// Add or update an owner with their cumulative share count.
+				if (!bonklerOwners[owner]) {
+					bonklerOwners[owner] = {
+						name: ens ? ens : owner,
+						shares: data.stagedEther
+					};
+				} else {
+					bonklerOwners[owner] = {
+						name: ens ? ens : owner,
+						shares: bonklerOwners[owner].shares.add(data.stagedEther)
+					};
+				}
+			}
+
+			// Sort all shareholders.
+			const holders = Object.values(bonklerOwners).sort(
+				(a, b) => b.shares.sub(a.shares)
+			);
+
+			// Update the leaderboard.
+			const leaderboard = document.getElementById('leaderboard');
+			leaderboard.innerHTML = '';
+			for (const holder of holders) {
+				const element = document.createElement('li');
+				element.innerHTML = `${holder.name} - ${ethers.utils.formatEther(holder.shares)}`;
+				leaderboard.appendChild(element);
+			}
+		})();
 
 		// Retrieve important Bonkler auction details.
 		let bonklerId;
@@ -985,9 +1116,9 @@
 			bonklerDetails.textContent = `${winningBidder} is winning Bonkler ${bonklerId} with ${ethers.utils.formatEther(bidAmount)} Ether; the auction ends in ${hours}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}.`;
 
 			// Retrieve Bonklet bidder details.
-			const status = (winningBidder == BONKLET_BIDDER_ADDRESS)
+			const status = (winningBidder == BONKLET_BIDDER_1)
 				? 'winning' : 'losing';
-			const stagedTotal = await bonkletBidder.stagedTotal(bonklerId);
+			const stagedTotal = await bonkletBidder1.stagedTotal(bonklerId);
 
 			// Update the Bonklet display.
 			const bonkletDetails = document.getElementById('bonklet-details');
@@ -1019,7 +1150,7 @@
 				// Issue the stage bid transaction.
 				const bidAmount = document.getElementById('bid-amount');
 				let amount = bidAmount.value;
-				await bonkletBidder.connect(signer).stageBid(
+				await bonkletBidder1.connect(signer).stageBid(
 					bonklerId,
 					generationHash,
 					{
