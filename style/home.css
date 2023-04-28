@@ -1,10 +1,168 @@
 html,
 body {
-	margin: 2%;
-	height: 100%;
-	background-color: bisque;
+	margin: 1%;
+	height: 105%;
+	background-image: url("OKb6iYWJ_400x400.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: 100% 100%;
+}
+@keyframes color-change {
+	0% { border-image: linear-gradient(to right, #ef3550, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047) 1; }
+	20% { border-image: linear-gradient(to right, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #ef3550) 1; }
+	40% { border-image: linear-gradient(to right, #7e57c2, #2196f3, #26c6da, #43a047, #ef3550, #f48fb1) 1; }
+	60% { border-image: linear-gradient(to right, #2196f3, #26c6da, #43a047, #ef3550, #f48fb1, #7e57c2) 1; }
+	80% { border-image: linear-gradient(to right, #26c6da, #43a047, #ef3550, #f48fb1, #7e57c2, #2196f3) 1; }
+	100% { border-image: linear-gradient(to right, #43a047, #ef3550, #f48fb1, #7e57c2, #2196f3, #26c6da) 1; }
+  }
+
+@keyframes slide {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(70vw); }
+  100% { transform: translateX(0); }
+}
+
+.container {
+  width: 100%;
+}
+
+#bonkler-details {
+  padding: 20px;
+  border-style: solid;
+  border-width: 5px;
+  border-image: linear-gradient(to right, #ef3550, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722) 1;
+  font-family: "Comic Sans MS", "Comic Sans", cursive;
+  text-align: center;
+  background-color: rgb(179, 185, 201);
+  animation: slide 10s ease-in-out infinite;
+  margin-bottom: 1%;
+  max-width: 33%;
+  animation-fill-mode: forwards;
+}
+@keyframes slide {
+	0% { transform: translateX(0); }
+	50% { transform: translateX(61vw); }
+	100% { transform: translateX(0); }
+  }
+  
+  
+  #bonkler-details {
+	padding: 20px;
+	border-style: solid;
+	border-width: 5px;
+	border-image: linear-gradient(to right, #ef3550, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722) 1;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+	text-align: center;
+	background-color: rgb(179, 185, 201);
+	animation: slide 15s ease-in-out infinite, color-change 1s infinite;
+	margin-bottom: 1%;
+	max-width: 33%;
+	animation-fill-mode: forwards;
+	overflow: hidden;
+  }
+  
+  
+  
+  
+  
+  
+
+#bonklet-details {
+	padding: 20px;
+	border-style: solid;
+	border-width: 5px;
+	border-image: linear-gradient(to right, #ef3550, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722) 1;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+	text-align: center;
+	background-color: rgb(179, 185, 201);
+	margin-bottom: 1%;
+	width: 33%;
+	animation: slide 12s ease-in-out infinite, color-change 1s infinite;
+	text-overflow: wrap;
 }
 
 #information {
 	padding: 20px;
+	border-style: solid;
+	border-width: 5px;
+	border-image: linear-gradient(to right, #ef3550, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722) 1;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+	text-align: center;
+	background-color: rgb(179, 185, 201);
+	animation: color-change 1s infinite;
+	margin-bottom: 1%;
+	width: 50%;
+	margin-left: 22%;
+}
+
+#information a {
+	box-shadow: inset 0 0 0 0 #001aff;
+	color: #001aff;
+	margin: 0 -.25rem;
+	padding: 0 .25rem;
+	transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+	text-decoration: none;
+}
+
+#information a:hover {
+	box-shadow: inset 600px 0 0 0 #001aff;
+	color: white;
+  }
+
+#bonklet-header{
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+	font-size: 72px;
+	text-shadow: -4px 4px #ef3550,
+	-8px 8px #f48fb1,
+	-12px 12px #7e57c2,
+	-16px 16px #2196f3,
+	-20px 20px #26c6da,
+	-24px 24px #43a047,
+	-28px 28px #eeff41,
+	-32px 32px #f9a825,
+	-36px 36px #ff5722;
+	color: white;
+	text-align: center;
+	margin-bottom: 3%;
+}
+
+#bid-area{ 
+	padding: 20px;
+	border-style: solid;
+	border-width: 5px;
+	border-image: linear-gradient(to right, #ef3550, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722) 1;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+	text-align: center;
+	background-color: rgb(179, 185, 201);
+	animation: color-change 1s infinite;
+	margin-bottom: 1%;
+	max-width: 33%;
+	animation-fill-mode: forwards;
+	overflow: hidden;
+	margin-left: 31%;
+  }
+
+  #bid-area button{ 
+	background-color: blue;
+	color: white;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+  }
+
+  #bid-amount{
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+  }
+
+  #leaderboard-area {
+	padding: 20px;
+	border-style: solid;
+	border-width: 5px;
+	border-image: linear-gradient(to right, #ef3550, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722) 1;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+	text-align: center;
+	background-color: rgb(179, 185, 201);
+	margin-bottom: 1%;
+	width: 33%;
+	animation: color-change 1s infinite;
+	text-overflow: wrap;
+	margin-left: 31%;
 }
