@@ -1015,29 +1015,33 @@
 			];
 			const bonklerOwners = {};
 			for (let i = 1; i < nextBonklerId; i++) {
-				let owner = await bonklerNFT.ownerOf(i);
-				const ens = await infuraProvider.lookupAddress(owner);
-				const shares = await bonklerNFT.getBonklerShares(i);
-				if (shares.eq(0)) {
+				try {
+					let owner = await bonklerNFT.ownerOf(i);
+					const ens = await infuraProvider.lookupAddress(owner);
+					const shares = await bonklerNFT.getBonklerShares(i);
+					if (shares.eq(0)) {
+						continue;
+					}
+
+					// Combine Bonklet addresses.
+					if (bonkletBidderAddresses.includes(owner)) {
+						owner = 'Bonklets';
+					}
+
+					// Add or update an owner with their cumulative share count.
+					if (!bonklerOwners[owner]) {
+						bonklerOwners[owner] = {
+							name: ens ? ens : owner,
+							shares: shares
+						};
+					} else {
+						bonklerOwners[owner] = {
+							name: ens ? ens : owner,
+							shares: bonklerOwners[owner].shares.add(shares)
+						};
+					}
+				} catch (error) {
 					continue;
-				}
-
-				// Combine Bonklet addresses.
-				if (bonkletBidderAddresses.includes(owner)) {
-					owner = 'Bonklets';
-				}
-
-				// Add or update an owner with their cumulative share count.
-				if (!bonklerOwners[owner]) {
-					bonklerOwners[owner] = {
-						name: ens ? ens : owner,
-						shares: shares
-					};
-				} else {
-					bonklerOwners[owner] = {
-						name: ens ? ens : owner,
-						shares: bonklerOwners[owner].shares.add(shares)
-					};
 				}
 			}
 
